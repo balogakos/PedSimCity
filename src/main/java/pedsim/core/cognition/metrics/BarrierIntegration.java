@@ -24,11 +24,12 @@ import sim.util.geo.MasonGeometry;
 public class BarrierIntegration {
 
   /**
-   * Returns a set of barriers in the direction of the destination node from a given location.
+   * Returns a set of barriers in the direction of the destination node from a
+   * given location.
    *
    * @param currentLocation The current node.
    * @param destinationNode The destination node.
-   * @param agent The agent whose barrier type should be considered.
+   * @param agent           The agent whose barrier type should be considered.
    * @return A mapping of the viewField and the barrierIDs intersecting it.
    */
   // TODO CONTROL PERFORMANCE
@@ -41,11 +42,9 @@ public class BarrierIntegration {
     Geometry viewField = Angles.viewField(currentLocation, destinationNode, 70.0);
 
     // TODO
-    List<MasonGeometry> intersectingGeometries =
-        PedSimCity.barriers.intersectingFeatures(viewField);
+    List<MasonGeometry> intersectingGeometries = PedSimCity.barriers.intersectingFeatures(viewField);
     Set<Integer> agentKnownBarriers = agent.getCognitiveMap().getAgentKnownBarriers();
-    List<MasonGeometry> agentKnownBarriersGeometries =
-        PedSimCity.barriers.getGeometriesFromIDs(agentKnownBarriers);
+    List<MasonGeometry> agentKnownBarriersGeometries = PedSimCity.barriers.getGeometriesFromIDs(agentKnownBarriers);
     intersectingGeometries.retainAll(agentKnownBarriersGeometries);
 
     if (agentKnownBarriersGeometries.isEmpty() || intersectingGeometries.isEmpty()) {
@@ -90,13 +89,20 @@ public class BarrierIntegration {
   }
 
   /**
-   * Sets the barrier information for an EdgeGraph based on attribute values. This method parses
-   * attribute strings representing different types of barriers, such as positive barriers, negative
-   * barriers, rivers, and parks, and populates the corresponding lists in the EdgeGraph. The method
-   * retrieves attribute values for positive barriers ("p_barr"), negative barriers ("n_barr"),
-   * rivers ("a_rivers"), and parks ("w_parks") from the EdgeGraph's attributes. It parses these
-   * strings to extract barrier IDs and adds them to the appropriate lists: positiveBarriers,
-   * negativeBarriers, waterBodies, and parks. Additionally, it combines positive and negative
+   * Sets the barrier information for an EdgeGraph based on attribute values. This
+   * method parses
+   * attribute strings representing different types of barriers, such as positive
+   * barriers, negative
+   * barriers, rivers, and parks, and populates the corresponding lists in the
+   * EdgeGraph. The method
+   * retrieves attribute values for positive barriers ("p_barr"), negative
+   * barriers ("n_barr"),
+   * rivers ("a_rivers"), and parks ("w_parks") from the EdgeGraph's attributes.
+   * It parses these
+   * strings to extract barrier IDs and adds them to the appropriate lists:
+   * positiveBarriers,
+   * negativeBarriers, waterBodies, and parks. Additionally, it combines positive
+   * and negative
    * barriers into the 'barriers' list for convenient access.
    *
    * @param edge The EdgeGraph for which barrier information is being set.
@@ -133,9 +139,9 @@ public class BarrierIntegration {
   }
 
   /**
-   * It stores information about the barriers within a given SubGraph.
+   * It stores information about the barriers within a given Region.
    *
-   * @param subGraph The SubGraph for which the barrier information is being set.
+   * @param region The region for which the barrier information is being set.
    */
   public static void setRegionBarriers(Region region) {
 

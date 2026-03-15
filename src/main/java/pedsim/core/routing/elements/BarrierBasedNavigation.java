@@ -25,7 +25,8 @@ import sim.util.geo.MasonGeometry;
 import sim.util.geo.Utilities;
 
 /**
- * Series of functions for computing a sequence of barrier sub-goals in the space between an origin
+ * Series of functions for computing a sequence of barrier sub-goals in the
+ * space between an origin
  * and a destination.
  */
 public class BarrierBasedNavigation {
@@ -43,9 +44,9 @@ public class BarrierBasedNavigation {
   /**
    * Initialises a new instance of the BarrierBasedNavigation class.
    *
-   * @param originNode the origin node;
-   * @param destinationNode the destination node;
-   * @param agent the agent for navigation.
+   * @param originNode            the origin node;
+   * @param destinationNode       the destination node;
+   * @param agent                 the agent for navigation.
    * @param regionBasedNavigation
    */
   public BarrierBasedNavigation(NodeGraph originNode, NodeGraph destinationNode, Agent agent,
@@ -59,11 +60,11 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Computes a sequence of nodes, including origin, destination, and barrier sub-goals, and
+   * Computes a sequence of nodes, including origin, destination, and barrier
+   * sub-goals, and
    * identifies traversed regions.
    *
    * @return an ArrayList of NodeGraph representing the sequence of sub-goals.
-   * @throws Exception
    */
   public List<NodeGraph> sequenceBarriers() {
 
@@ -86,10 +87,9 @@ public class BarrierBasedNavigation {
 
       EdgeGraph edgeGoal = barrierGoal.getValue0();
       int barrier = barrierGoal.getValue1();
-      NodeGraph subGoal =
-          GraphUtils.nodesDistance(currentLocation, edgeGoal.getFromNode()) < GraphUtils
-              .nodesDistance(currentLocation, edgeGoal.getToNode()) ? edgeGoal.getFromNode()
-                  : edgeGoal.getToNode();
+      NodeGraph subGoal = GraphUtils.nodesDistance(currentLocation, edgeGoal.getFromNode()) < GraphUtils
+          .nodesDistance(currentLocation, edgeGoal.getToNode()) ? edgeGoal.getFromNode()
+              : edgeGoal.getToNode();
 
       sequence.add(subGoal);
       currentLocation = subGoal;
@@ -107,11 +107,14 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Finds the valid barriers along the line of movement towards the destination within the given
+   * Finds the valid barriers along the line of movement towards the destination
+   * within the given
    * region.
    *
-   * @param currentLocation The current node location (gateway when region-based navigation).
-   * @param region the region of the currentLocation, only for region-based navigation.
+   * @param currentLocation The current node location (gateway when region-based
+   *                        navigation).
+   * @param region          the region of the currentLocation, only for
+   *                        region-based navigation.
    * @return
    */
   protected Map<Integer, Double> findValidBarriers(NodeGraph currentLocation, Region region) {
@@ -121,8 +124,8 @@ public class BarrierBasedNavigation {
 
     // check if there are good barriers in line of movement towards the destination,
     // known by the agent
-    Map<Geometry, Set<Integer>> viewFieldIntersectingBarriers =
-        barrierIntegration.intersectingBarriers(currentLocation, destinationNode, agent);
+    Map<Geometry, Set<Integer>> viewFieldIntersectingBarriers = barrierIntegration.intersectingBarriers(currentLocation,
+        destinationNode, agent);
 
     // no barriers
     if (viewFieldIntersectingBarriers.isEmpty()) {
@@ -153,9 +156,10 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Filter barriers by region if region-based navigation is active and the region is known.
+   * Filter barriers by region if region-based navigation is active and the region
+   * is known.
    *
-   * @param region The region object for filtering barriers.
+   * @param region               The region object for filtering barriers.
    * @param intersectingBarriers The set of intersecting barriers to filter.
    */
   private void filterBarriersByRegion(Region region, Set<Integer> intersectingBarriers) {
@@ -165,7 +169,8 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Identifies the barriers surrounding the current location by examining the incoming edges of the
+   * Identifies the barriers surrounding the current location by examining the
+   * incoming edges of the
    * node. Adds the identified barriers to the list of adjacent barriers.
    */
   private void identifyAdjacentBarriers() {
@@ -180,33 +185,41 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Check each candidate barrier and add it to validBarriers if it meets the distance criteria.
+   * Check each candidate barrier and add it to validBarriers if it meets the
+   * distance criteria.
    *
-   * @param intersectingBarriers The set of intersecting barriers to check.
-   * @param validBarriers The map to store valid barriers and their distances.
-   * @param currentCoordinate The current location coordinate.
+   * @param intersectingBarriers  The set of intersecting barriers to check.
+   * @param validBarriers         The map to store valid barriers and their
+   *                              distances.
+   * @param currentCoordinate     The current location coordinate.
    * @param destinationCoordinate The destination node coordinate.
    */
   private void assessCandidateBarriers(Set<Integer> intersectingBarriers, Geometry viewField,
       Coordinate currentCoordinate, Coordinate destinationCoordinate) {
 
-    //// System.out.println("currentCorrdinate " + currentCoordinate + "viewField -- " + viewField);
+    //// System.out.println("currentCorrdinate " + currentCoordinate + "viewField --
+    //// " + viewField);
     // intersectingBarriers.parallelStream().filter(barrierID ->
     //// !visitedBarriers.contains(barrierID))
     // .forEach(barrierID -> {
-    // MasonGeometry barrierGeometry = PedSimCity.barriersMap.get(barrierID).masonGeometry;
+    // MasonGeometry barrierGeometry =
+    //// PedSimCity.barriersMap.get(barrierID).masonGeometry;
     //
-    //// System.out.println("barrierID " + barrierID + " barrierGeo " + barrierGeometry);
+    //// System.out.println("barrierID " + barrierID + " barrierGeo " +
+    //// barrierGeometry);
     // Coordinate[] intersections =
     //// viewField.intersection(barrierGeometry.geometry).getCoordinates();
     //
     // double minDistance = Arrays.stream(intersections).parallel()
-    // .mapToDouble(intersection -> GraphUtils.euclideanDistance(currentCoordinate, intersection))
+    // .mapToDouble(intersection -> GraphUtils.euclideanDistance(currentCoordinate,
+    //// intersection))
     // .min().orElse(Double.MAX_VALUE);
     //
-    //// System.out.println("barrierID " + barrierID + " minDistance min " + minDistance);
+    //// System.out.println("barrierID " + barrierID + " minDistance min " +
+    //// minDistance);
     //
-    // if (minDistance <= GraphUtils.euclideanDistance(currentCoordinate, destinationCoordinate)) {
+    // if (minDistance <= GraphUtils.euclideanDistance(currentCoordinate,
+    //// destinationCoordinate)) {
     // validBarriers.put(barrierID, minDistance);
     // }
     // });
@@ -217,8 +230,7 @@ public class BarrierBasedNavigation {
         continue;
       }
       MasonGeometry barrierGeometry = PedSimCity.barriersMap.get(barrierID).masonGeometry;
-      Coordinate[] intersections =
-          viewField.intersection(barrierGeometry.geometry).getCoordinates();
+      Coordinate[] intersections = viewField.intersection(barrierGeometry.geometry).getCoordinates();
 
       double minDistance = Arrays.stream(intersections).parallel()
           .mapToDouble(
@@ -237,12 +249,16 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Identifies an edge-subGoals associated with the most attractive barrier, complying with certain
+   * Identifies an edge-subGoals associated with the most attractive barrier,
+   * complying with certain
    * criteria, and finds the closest edge to them.
    *
-   * @param validBarriers a set of valid, intersecting barriers towards the destination.
-   * @param region the region of the currentLocation, only for region-based navigation.
-   * @return a Pair of EdgeGraph and Integer representing the closest edge to the barrier and the
+   * @param validBarriers a set of valid, intersecting barriers towards the
+   *                      destination.
+   * @param region        the region of the currentLocation, only for region-based
+   *                      navigation.
+   * @return a Pair of EdgeGraph and Integer representing the closest edge to the
+   *         barrier and the
    *         barrierID.
    */
   protected Pair<EdgeGraph, Integer> identifyBarrierSubGoal(Map<Integer, Double> validBarriers,
@@ -293,8 +309,7 @@ public class BarrierBasedNavigation {
 
       // this is considered a good Edge, sort by distance and takes the closest to the
       // current location.
-      Map<EdgeGraph, Double> thisBarrierSubGoalSorted =
-          Utilities.sortByValue(thisBarrierEdgeGoals, false);
+      Map<EdgeGraph, Double> thisBarrierSubGoalSorted = Utilities.sortByValue(thisBarrierEdgeGoals, false);
       EdgeGraph possibleEdgeGoal = thisBarrierSubGoalSorted.keySet().iterator().next();
 
       switch (type) {
@@ -324,10 +339,12 @@ public class BarrierBasedNavigation {
   }
 
   /**
-   * Checks requirements for selecting barrier sub-goals from a list of edges along a barrier.
+   * Checks requirements for selecting barrier sub-goals from a list of edges
+   * along a barrier.
    *
    * @param edgesAlong a list of edges along a barrier;
-   * @return a HashMap of EdgeGraph and Double representing eligible barrier sub-goals and their
+   * @return a HashMap of EdgeGraph and Double representing eligible barrier
+   *         sub-goals and their
    *         distances.
    */
   private Map<EdgeGraph, Double> keepValidSubGoals(List<EdgeGraph> edgesAlong) {

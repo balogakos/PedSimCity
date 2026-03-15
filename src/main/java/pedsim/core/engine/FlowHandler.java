@@ -17,10 +17,9 @@ import sim.routing.Route;
 import sim.util.geo.MasonGeometry;
 
 /**
- * The Flow class provides methods for updating various data related to agent movement and route
+ * The FlowHandler class provides methods for updating various data related to agent
+ * movement and route
  * storing in the simulation.
- *
- * @param <E>
  */
 public class FlowHandler {
 
@@ -43,9 +42,8 @@ public class FlowHandler {
     this.enumScenarios = getSimulationScenarioValues();
 
     if (enumAgentScenarios != null && enumScenarios != null) {
-      scenarios =
-          Arrays.stream(enumAgentScenarios).flatMap(agentScenario -> Arrays.stream(enumScenarios)
-              .map(simScenario -> agentScenario + "_" + simScenario)).toArray(String[]::new);
+      scenarios = Arrays.stream(enumAgentScenarios).flatMap(agentScenario -> Arrays.stream(enumScenarios)
+          .map(simScenario -> agentScenario + "_" + simScenario)).toArray(String[]::new);
     } else if (enumAgentScenarios != null) {
       scenarios = Arrays.stream(enumAgentScenarios).map(Enum::toString).toArray(String[]::new);
     } else if (enumScenarios != null) {
@@ -68,15 +66,17 @@ public class FlowHandler {
   }
 
   /**
-   * Initialises the edge volumes for the simulation. This method assigns initial volume values to
-   * edges based on the selected route choice models or empirical agent groups. If the simulation is
-   * not empirical, it initialises volumes based on the route choice models. If the simulation is
+   * Initialises the edge volumes for the simulation. This method assigns initial
+   * volume values to
+   * edges based on the selected route choice models or empirical agent groups. If
+   * the simulation is
+   * not empirical, it initialises volumes based on the route choice models. If
+   * the simulation is
    * empirical-based, it initialises volumes based on empirical agent groups.
    */
   protected void initializeEdgeVolumes() {
     for (int edgeID : PedSimCity.edgesMap.keySet()) {
-      Map<String, Integer> edgeVolumes =
-          Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
+      Map<String, Integer> edgeVolumes = Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
       volumesMap.put(edgeID, edgeVolumes);
     }
   }
@@ -84,24 +84,24 @@ public class FlowHandler {
   private void initializeCognitiveMapCollector() {
 
     for (Integer edgeID : PedSimCity.edgesMap.keySet()) {
-      Map<String, Integer> edgeMap =
-          Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
+      Map<String, Integer> edgeMap = Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
       knownEdgesMap.put(edgeID, edgeMap);
     }
 
     for (Integer buildingID : PedSimCity.buildingsMap.keySet()) {
-      Map<String, Integer> buildingMap =
-          Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
+      Map<String, Integer> buildingMap = Arrays.stream(scenarios).collect(Collectors.toMap(s -> s, s -> 0));
       knownLandmarksMap.put(buildingID, buildingMap);
     }
   }
 
   /**
-   * Updates the edge data on the basis of the passed agent's route and its edges sequence.
+   * Updates the edge data on the basis of the passed agent's route and its edges
+   * sequence.
    *
-   * @param agent The agent for which edge data is updated.
-   * @param route The route taken by the agent.
-   * @param night Boolean flag indicating whether it is night or day.
+   * @param agent               The agent for which edge data is updated.
+   * @param route               The route taken by the agent.
+   * @param agentScenarioValue  The scenario value for the agent.
+   * @param scenarioValue       The scenario value for the simulation.
    */
   public synchronized void updateFlowsData(Agent agent, Route route, Enum<?> agentScenarioValue,
       Enum<?> scenarioValue) {
@@ -136,17 +136,15 @@ public class FlowHandler {
   }
 
   /**
-   * Updates the edge data on the basis of the passed agent's route and its edges sequence.
+   * Updates the edge data on the basis of the passed agent's route and its edges
+   * sequence.
    *
-   * @param agent The agent for which edge data is updated.
-   * @param directedEdgesSequence The sequence of directed edges travelled by the agent.
-   * @throws Exception
+   * @param scenarioValue       The scenario value for the simulation.
    */
   public synchronized void updateCognitiveMapsData(Enum<?> scenarioValue) throws Exception {
 
     for (Agent agent : state.agentsList) {
-      String agentScenarioValueStr =
-          (agent.getAgentScenario() != null) ? agent.getAgentScenario().toString() : null;
+      String agentScenarioValueStr = (agent.getAgentScenario() != null) ? agent.getAgentScenario().toString() : null;
       String attribute = (scenarioValue != null && agentScenarioValueStr != null)
           ? agentScenarioValueStr + "_" + scenarioValue.toString()
           : (agentScenarioValueStr != null ? agentScenarioValueStr : "DEFAULT");
@@ -163,8 +161,7 @@ public class FlowHandler {
       }
 
       Set<Integer> buildings = cognitiveMap.getLocalLandmarksIDs();
-      List<MasonGeometry> buildingGeoemetries =
-          SharedCognitiveMap.getBuildings().getGeometriesFromIDs(buildings);
+      List<MasonGeometry> buildingGeoemetries = SharedCognitiveMap.getBuildings().getGeometriesFromIDs(buildings);
 
       for (MasonGeometry buildingGeometry : buildingGeoemetries) {
         int buildingID = buildingGeometry.getIntegerAttribute("buildingID");

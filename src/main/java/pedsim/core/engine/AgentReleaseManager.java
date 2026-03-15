@@ -16,8 +16,10 @@ import pedsim.core.utilities.LoggerUtil;
 import sim.util.geo.Utilities;
 
 /**
- * The AgentReleaseManager class handles the release of agents for the pedestrian simulation,
- * distributing the total expected walking distance for agents during a given time period.
+ * The AgentReleaseManager class handles the release of agents for the
+ * pedestrian simulation,
+ * distributing the total expected walking distance for agents during a given
+ * time period.
  */
 public class AgentReleaseManager {
 
@@ -33,8 +35,11 @@ public class AgentReleaseManager {
   /**
    * Constructor for AgentReleaseManager.
    * 
-   * @param state the PedSimCity instance representing the simulation state.
-   * @param kmCurrentDay the current expected walking distance for the day (in meters).
+   * @param state                  the PedSimCity instance representing the
+   *                               simulation
+   *                               state.
+   * @param metersToWalkCurrentDay the current expected walking distance for the
+   *                               day (in meters).
    */
   public AgentReleaseManager(PedSimCity state, Double metersToWalkCurrentDay) {
     this.state = state;
@@ -45,7 +50,8 @@ public class AgentReleaseManager {
   }
 
   /**
-   * Releases agents to start walking based on the calculated walking distances for the day.
+   * Releases agents to start walking based on the calculated walking distances
+   * for the day.
    *
    * @param steps the current simulation step count.
    */
@@ -54,10 +60,9 @@ public class AgentReleaseManager {
     currentTime = TimePars.getTime(steps);
     metersWalkedSoFarToday = computeMetersWalkedSoFar();
     double metersToAllocate = (metersToWalkCurrentDay * TimePars.computeTimeStepShare(currentTime));
-    double metersAdjusted =
-        (metersToAllocate + (expectedMetersWalkedSoFarToday - metersWalkedSoFarToday)) * 0.5; // to
-                                                                                              // account
-                                                                                              // for
+    double metersAdjusted = (metersToAllocate + (expectedMetersWalkedSoFarToday - metersWalkedSoFarToday)) * 0.5; // to
+                                                                                                                  // account
+                                                                                                                  // for
     // return home
     if (metersAdjusted > 0) {
       releaseAgentsMeters(metersAdjusted);
@@ -69,17 +74,20 @@ public class AgentReleaseManager {
   }
 
   /**
-   * Releases a set of agents to walk a specific distance, based on the kilometers to allocate. The
-   * number of agents to release is calculated based on the expected distance and the average trip
-   * distance. After selecting the agents, the distance is allocated to them and their activities
+   * Releases a set of agents to walk a specific distance, based on the kilometers
+   * to allocate. The
+   * number of agents to release is calculated based on the expected distance and
+   * the average trip
+   * distance. After selecting the agents, the distance is allocated to them and
+   * their activities
    * are updated.
    *
-   * @param kmToAllocate the total kilometres to be allocated for the selected agents to walk.
+   * @param kmToAllocate the total kilometres to be allocated for the selected
+   *                     agents to walk.
    */
   private void releaseAgentsMeters(double metersToAllocate) {
 
-    int agentsExpectedToWalk =
-        Math.max(1, (int) (metersToAllocate / RouteChoicePars.avgTripDistance));
+    int agentsExpectedToWalk = Math.max(1, (int) (metersToAllocate / RouteChoicePars.avgTripDistance));
 
     Set<Agent> agentsAtHome = new HashSet<>(state.agentsAtHome);// least one
     // agent
@@ -92,7 +100,8 @@ public class AgentReleaseManager {
   }
 
   /**
-   * Logs the current walking agent statistics, including the number of agents walking, expected
+   * Logs the current walking agent statistics, including the number of agents
+   * walking, expected
    * versus walked Kilometres, and whether it is night or not.
    */
   private void logWalkingAgents() {
@@ -102,11 +111,14 @@ public class AgentReleaseManager {
         expectedMetersWalkedSoFarToday / 1000, metersWalkedSoFarToday / 1000));
   }
 
-  // private int determineNrAgentsToRelease(int expectedPedestrians, Set<Agent> agentsWalking) {
+  // private int determineNrAgentsToRelease(int expectedPedestrians, Set<Agent>
+  // agentsWalking) {
   //
-  // double timeStepWeight = computeTimeStepWeight(); // Adjusted based on the time of day
+  // double timeStepWeight = computeTimeStepWeight(); // Adjusted based on the
+  // time of day
   // // Ensure the result is non-negative
-  // return Math.max((int) (expectedPedestrians / timeStepWeight) - agentsWalking.size(), 0);
+  // return Math.max((int) (expectedPedestrians / timeStepWeight) -
+  // agentsWalking.size(), 0);
   // }
   //
   // private int calculateActivePedestrians() {
@@ -119,11 +131,14 @@ public class AgentReleaseManager {
   // }
 
   /**
-   * Allocates the specified walking distance across a set of agents using parallel processing. Each
-   * agent gets a random variability applied to the allocated distance, ensuring they stay within
+   * Allocates the specified walking distance across a set of agents using
+   * parallel processing. Each
+   * agent gets a random variability applied to the allocated distance, ensuring
+   * they stay within
    * defined minimum and maximum limits.
    *
-   * @param agentSet the set of agents to which the distance will be allocated.
+   * @param agentSet     the set of agents to which the distance will be
+   *                     allocated.
    * @param kmToAllocate the total kilometers to be allocated to agents.
    */
   private void allocateMetersAcrossAgents(Set<Agent> agentSet) {
@@ -148,11 +163,13 @@ public class AgentReleaseManager {
   }
 
   /**
-   * Selects a specified number of agents randomly, with a weighted probability towards agents that
-   * have walked less distance. The selection is done using parallel streams to improve performance.
+   * Selects a specified number of agents randomly, with a weighted probability
+   * towards agents that
+   * have walked less distance. The selection is done using parallel streams to
+   * improve performance.
    *
    * @param homeAgents the set of home agents to select from.
-   * @param nrAgents the number of agents to select.
+   * @param nrAgents   the number of agents to select.
    * @return a set of randomly selected agents.
    */
   private Set<Agent> selectRandomAgents(Set<Agent> homeAgents, int nrAgents) {
@@ -180,7 +197,8 @@ public class AgentReleaseManager {
   }
 
   /**
-   * Computes the total kilometres walked by all agents in the simulation up to the current time.
+   * Computes the total kilometres walked by all agents in the simulation up to
+   * the current time.
    *
    * @return the total kilometres walked by all agents.
    */
